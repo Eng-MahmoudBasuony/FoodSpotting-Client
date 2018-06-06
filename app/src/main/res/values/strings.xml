@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">EMBEat It</string>
+    <string name="slogn">From classic favourites to artisan flavours. Choose from tasty toasties packed full of succulent meat, fresh grilled vegetables and melted cheese – dripping with delicious dressings.</string>
+    <string name="Sign_Up">Sign Up</string>
+    <string name="Sign_In">Sign In</string>
+    <string name="notAmemberYet">Not a member yet? </string>
+    <string name="Login_Here">Sign Up Here</string>
+    <string name="Phone_Number">Phone Number</string>
+    <string name="Password">Password</string>
+    <string name="alreadhaveeaccount">Alrady have Account</string>
+    <string name="Sign_In_Here">Sign In Here</string>
+    <string name="Name_User">Name</string>
+    <string name="title_activity_home">Home</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="placeOrder">Place Order</string>
+    <string name="enter_your_food">Enter your Food</string>
+</resources>

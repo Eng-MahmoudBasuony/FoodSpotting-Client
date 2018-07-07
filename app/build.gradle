@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.eng_mahnoud83coffey.embeatit"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -26,10 +26,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    /--------------------------------------------------------/
+    /---------------------firebase--------------------------/
     implementation 'com.google.firebase:firebase-core:16.0.0'//Analytics
     implementation 'com.google.firebase:firebase-database:16.0.1'// 	Realtime Database
     implementation 'com.android.support:design:27.1.1'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'//Cloud Messaging
+
 
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
@@ -51,6 +53,24 @@ dependencies {
 
     //Material Design Search Bar for Android
     implementation 'com.github.mancj:MaterialSearchBar:0.7.6'
+
+
+     //Paper is a fast NoSQL-like storage for Java/Kotlin objects on Android with automatic schema migration support.
+    implementation 'io.paperdb:paperdb:2.6'//help you write key-value to android Memory
+
+    implementation 'com.github.rey5137:material:1.2.5'//Add Material Check Box to Project
+
+    //Library Material Rating Bar
+    implementation 'com.stepstone.apprating:app-rating:2.2.0'
+
+    //-----------Retrofit---------------------//
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+    //Library AlertDialog with moving dots progress indicator
+   // implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

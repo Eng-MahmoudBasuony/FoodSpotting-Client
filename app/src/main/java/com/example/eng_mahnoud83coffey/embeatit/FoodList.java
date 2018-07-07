@@ -11,7 +11,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
+import com.example.eng_mahnoud83coffey.embeatit.Database.Database;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Food;
 import com.example.eng_mahnoud83coffey.embeatit.ViewHolder.FoodViewHolder;
@@ -49,7 +53,8 @@ public class FoodList extends AppCompatActivity {
     MaterialSearchBar materialSearchBar;
     private FirebaseRecyclerAdapter<Food,FoodViewHolder> searchAdapter;
 
-
+    //----------------------------------
+     Database localDatabe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,18 +65,22 @@ public class FoodList extends AppCompatActivity {
 
           //-------------------Id----------------------------//
          recyclerViewFoods=(RecyclerView)findViewById(R.id.recyclerView_food);
-         materialSearchBar=(MaterialSearchBar)findViewById(R.id.search_Bar_FoodList);//---Search
+         materialSearchBar=(MaterialSearchBar)findViewById(R.id.search_Bar_FoodList);//---Search*/
+
 
 
             //------------------Firebase-------------------------//
-        database=FirebaseDatabase.getInstance();
-        foodList =database.getReference("Foods");
+          database=FirebaseDatabase.getInstance();
+          foodList =database.getReference("Foods");
 
 
         //------------------Recycler View------------------//
         recyclerViewFoods.setHasFixedSize(true);
         layoutManager=new LinearLayoutManager(this);
         recyclerViewFoods.setLayoutManager(layoutManager);
+
+        //-------------------------------------
+        localDatabe=new Database(this);
 
         //-----------------Get Intent Here-----------------//
          if (getIntent() != null)
@@ -81,14 +90,22 @@ public class FoodList extends AppCompatActivity {
 
               if (! categoryId.isEmpty() && categoryId !=null)
               {
+                  if (Common.IsConnectedToInternet(this))
+                  {
                       //Load Data on RecyclerView
                       loadListFoods(categoryId);
-              }
+
+                  }else
+                      {
+                          Toast.makeText(this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+                      }
+
+                  }
 
 
          }
 
-         //------------------ Search ----------//
+        //------------------ Search ----------//
          materialSearchBar.setHint("Enter your Food");
         // materialSearchBar.setSpeechMode(false);//if set to true, microphone icon will be displayed instead of search icon
 
@@ -97,6 +114,7 @@ public class FoodList extends AppCompatActivity {
         materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
 
+        //SEARCHBAR TEXT CHANGE LISTENER
         materialSearchBar.addTextChangeListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
@@ -110,7 +128,7 @@ public class FoodList extends AppCompatActivity {
 
                 //Then user Type their text ,we will change Suggest list
 
-                List<String>suggest=new ArrayList<>();
+                List<String> suggest =new ArrayList<String>();
 
                 for (String search: suggestList) //Loop in suggest List
                 {
@@ -145,6 +163,7 @@ public class FoodList extends AppCompatActivity {
             public void onSearchConfirmed(CharSequence text)
             { //When Search Finish
               //Show Resulet of Search Adabter
+                //startSearch(text);
                 startSearch(text);
 
             }
@@ -160,15 +179,18 @@ public class FoodList extends AppCompatActivity {
 
     }
 
-    private void startSearch(CharSequence text)
-    {
+    private void startSearch(CharSequence text) {
+        //---Using Firebase UI to populate a RecyclerView--------//
+       // query = foodList.orderByChild("Name").equalTo(text.toString()); //Compare Name
 
         //---Using Firebase UI to populate a RecyclerView--------//
         query= FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Foods").orderByChild("Name").equalTo(text.toString()); //Compare Name
+                .child("Foods").orderByChild("Name").equalTo(text.toString());
 
-        query.keepSynced(true);//Load Data OffLine
+
+
+        //  query.keepSynced(true);//Load Data OffLine
 
         options = new FirebaseRecyclerOptions.Builder<Food>()
                 .setQuery(query, Food.class)
@@ -197,46 +219,26 @@ public class FoodList extends AppCompatActivity {
                         .load(model.getImage())//Url
                         //  .networkPolicy(NetworkPolicy.OFFLINE)//تحميل الصوره Offline
                         //.placeholder(R.drawable.d)//الصوره الافتراضه اللى هتظهر لحد لما الصوره تتحمل
-                        .into(holder.foodimageView, new Callback()
-                        {
-                            @Override
-                            public void onSuccess() {//لو الصوره اتحملت offline بنجاح
+                        .into(holder.foodimageView);
 
-                            }
-                            @Override
-                            public void onError(Exception e)
-                            {//لو الصوره ماتحملتشى Offline بنجاح اعرضها Online
-
-                                Picasso.get()
-                                        .load(model.getImage())
-                                        //.placeholder(R.drawable.d)//الصوره الافتراضه اللى هتظهر لحد لما الصوره تتحمل
-                                        .into(holder.foodimageView);
-                            }
-                        });
-
-
-                final Food clickItem=model;
+                final Food clickItem = model;
 
 
                 //لما المستخدم يضغط على اى صف
                 holder.setItemClickListener(new ItemClickListener() {
 
                     @Override
-                    public void onClick(View view, int position, boolean isLongClick)
-                    {
+                    public void onClick(View view, int position, boolean isLongClick) {
                         //Start New Activity
 
-                        Intent foodDeatilsIntent=new Intent(FoodList.this,FoodDetails.class);
+                        Intent foodDeatilsIntent = new Intent(FoodList.this, FoodDetails.class);
 
                         foodDeatilsIntent.putExtra("FoodId", adapter.getRef(position).getKey());//send food id new Activity
                         startActivity(foodDeatilsIntent);
 
 
-
-
                     }
                 });
-
 
 
             }//end OnBind
@@ -245,12 +247,10 @@ public class FoodList extends AppCompatActivity {
         };//end Adapter
 
         recyclerViewFoods.setAdapter(searchAdapter); //set Adapter for Recycler view is search resulet
-
-
     }
 
 
-    //load suggest from firebase
+   //load suggest from firebase
     //Search
     private void loadSuggest()
     {
@@ -266,7 +266,6 @@ public class FoodList extends AppCompatActivity {
 
                                                         suggestList.add(foodItem.getName()); //Add name of food to Suggest List
                                              }
-
                                          }
 
                                          @Override
@@ -275,12 +274,6 @@ public class FoodList extends AppCompatActivity {
                                          }
                                      });
     }
-
-
-
-
-
-
 
 
      //Load Data from Firebase to displayed Recyclerview
@@ -323,26 +316,38 @@ public class FoodList extends AppCompatActivity {
                         .load(model.getImage())//Url
                         //  .networkPolicy(NetworkPolicy.OFFLINE)//تحميل الصوره Offline
                         //.placeholder(R.drawable.d)//الصوره الافتراضه اللى هتظهر لحد لما الصوره تتحمل
-                        .into(holder.foodimageView, new Callback()
-                        {
-                            @Override
-                            public void onSuccess() {//لو الصوره اتحملت offline بنجاح
-
-                            }
-                            @Override
-                            public void onError(Exception e)
-                            {//لو الصوره ماتحملتشى Offline بنجاح اعرضها Online
-
-                                Picasso.get()
-                                        .load(model.getImage())
-                                        //.placeholder(R.drawable.d)//الصوره الافتراضه اللى هتظهر لحد لما الصوره تتحمل
-                                        .into(holder.foodimageView);
-                            }
-                        });
-
+                        .into(holder.foodimageView);
 
                 final Food clickItem=model;
 
+
+
+                    //Check food do Favorites or Not ,is Not Display Image Favorite border...
+                if (localDatabe.isFoodFavorites(adapter.getRef(position).getKey()))
+                    holder.favimage.setImageResource(R.drawable.ic_favorite_black_24dp);
+
+                      //if Click on Image Favorites
+                holder.favimage.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view)
+                    {
+                            //Not Favorites
+                        if (!localDatabe.isFoodFavorites(adapter.getRef(position).getKey()))
+                        {
+                             //Add Favorites
+                            localDatabe.addToFavorites(adapter.getRef(position).getKey());
+                            holder.favimage.setImageResource(R.drawable.ic_favorite_black_24dp);
+                            Toast.makeText(FoodList.this, model.getName()+" was add Favorites", Toast.LENGTH_SHORT).show();
+                        }else
+                            { //IF FOOD Favorites
+                                    //Remove Food Favorites
+                                localDatabe.removeFavorites(adapter.getRef(position).getKey());
+                                 holder.favimage.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                                Toast.makeText(FoodList.this, model.getName()+" Remove From Favorites", Toast.LENGTH_SHORT).show();
+                            }
+                    }
+                });
 
                 //لما المستخدم يضغط على اى صف
                 holder.setItemClickListener(new ItemClickListener() {
@@ -356,27 +361,14 @@ public class FoodList extends AppCompatActivity {
 
                                foodDeatilsIntent.putExtra("FoodId", adapter.getRef(position).getKey());//send food id new Activity
                                startActivity(foodDeatilsIntent);
-
-
-
-
                     }
                 });
 
-
-
             }//end OnBind
-
-
         };//end Adapter
 
         recyclerViewFoods.setAdapter(adapter);
-
-
-
     }
-
-
 
     //Start Adapter
     @Override
@@ -393,8 +385,6 @@ public class FoodList extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
-
-
 
 
 }

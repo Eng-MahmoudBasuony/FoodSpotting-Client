@@ -58,9 +58,18 @@ public class OrderStatus extends AppCompatActivity {
         database=FirebaseDatabase.getInstance();
         table_requests=database.getReference("Requests");
 
-        //-------------------Action-----------------
+        //-------------------Event-----------------
 
-        loadOrderStatus(Common.currentUser.getPhone());
+        //if we start orderStatus activity from Home Activity
+        //we will not put any extra so we just LoadOrder by phone from common
+
+        if (getIntent() == null)
+                   loadOrderStatus(Common.currentUser.getPhone());
+        else
+                   loadOrderStatus(getIntent().getStringExtra("userPhone"));
+
+
+
 
     }
 
@@ -69,85 +78,68 @@ public class OrderStatus extends AppCompatActivity {
     {
 
 
-        //---Using Firebase UI to populate a RecyclerView--------//
-        query= FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Requests").orderByChild("phone").equalTo(phone);
+            //---Using Firebase UI to populate a RecyclerView--------//
+            query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("Requests").orderByChild("phone").equalTo(phone);
 
-        //.orderByChild("phone").equalTo(phone)
+            //.orderByChild("phone").equalTo(phone)
 
-        query.keepSynced(true);//Load Data OffLine
+            query.keepSynced(true);//Load Data OffLine
 
-        options = new FirebaseRecyclerOptions.Builder<Request>()
-                .setQuery(query, Request.class)
-                .build();
+            options = new FirebaseRecyclerOptions.Builder<Request>()
+                    .setQuery(query, Request.class)
+                    .build();
 
-        adapter = new FirebaseRecyclerAdapter<Request,OrderViewHolder>(options) {
-            @Override
-            public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                // Create a new instance of the ViewHolder, in this case we are using a custom
-                // layout called R.layout.message for each item
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.orderstatus_item, parent, false);
+            adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(options) {
+                @Override
+                public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    // Create a new instance of the ViewHolder, in this case we are using a custom
+                    // layout called R.layout.message for each item
+                    View view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.orderstatus_item, parent, false);
 
-                return new OrderViewHolder(view);
-            }
+                    return new OrderViewHolder(view);
+                }
 
-            @Override
-            protected void onBindViewHolder(final OrderViewHolder holder, final int position, final Request model) {
-                // Bind the Chat object to the ChatHolder
-
-                //Send Image Name to Recyclerview
-                holder.textOrderId.setText(adapter.getRef(position).getKey());
-                holder.textOrderStatus.setText(converCodeToStatus(model.getStatus()));
-                holder.textOrderPhone.setText(model.getPhone());
-                holder.textOrderAddress.setText(model.getAddress());
+                @Override
+                protected void onBindViewHolder(final OrderViewHolder holder, final int position, final Request model) {
+                    // Bind the Chat object to the ChatHolder
 
 
+                    //Send Image Name to Recyclerview
+                    holder.textOrderId.setText(adapter.getRef(position).getKey());
+                    holder.textOrderStatus.setText(Common.converCodeToStatus(model.getStatus()));
+                    holder.textOrderPhone.setText(model.getPhone());
+                    holder.textOrderAddress.setText(model.getAddress());
 
 
-                final Request clickItem=model;
+                    final Request clickItem = model;
 
 
-                //لما المستخدم يضغط على اى صف
-                holder.setItemClickListener(new ItemClickListener() {
+                    //لما المستخدم يضغط على اى صف
+                    holder.setItemClickListener(new ItemClickListener() {
 
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick)
-                    {
-                        //Get CategoryId and send to new Activity
-
-                       // Intent foodsListIntent=new Intent(Home.this,FoodList.class);
-
-                       // foodsListIntent.putExtra("CategoryId",adapter.getRef(position).getKey());//Just Get Key Of item
-                       // startActivity(foodsListIntent);
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            //Get CategoryId and send to new Activity
 
 
-                    }
-                });
+                        }
+                    });
 
 
+                }//end OnBind
 
-            }//end OnBind
 
+            };//end Adapter
 
-        };//end Adapter
+            recyclerViewOrderStatus.setAdapter(adapter);
 
-        recyclerViewOrderStatus.setAdapter(adapter);
 
     }
 
 
-
-    private String converCodeToStatus(String Status)
-    {
-             if (Status.equals("0"))
-                 return "Placed"; //وضعت
-             else if (Status.equals("1"))
-                 return "On my Way"; //انا في طريقي
-             else return " shipped"; //تم شحنها
-
-    }
 
 
     //Start Adapter

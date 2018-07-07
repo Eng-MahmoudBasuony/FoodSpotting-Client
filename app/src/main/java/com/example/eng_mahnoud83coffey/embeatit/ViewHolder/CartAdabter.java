@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Order;
 import com.example.eng_mahnoud83coffey.embeatit.R;
@@ -25,7 +27,8 @@ import java.util.Locale;
 
  // رViewHolder عاديه عشان الاAdabter
 //------------------View Holder-----------------//
-class  CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+class  CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+                                                                    ,View.OnCreateContextMenuListener{
 
 
     public TextView textCartName,textCartPrice;
@@ -41,7 +44,7 @@ class  CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         textCartPrice=(TextView)itemView.findViewById(R.id.cart_item_price);
         imageCartCount=(ImageView)itemView.findViewById(R.id.cart_item_count);
 
-
+       itemView.setOnCreateContextMenuListener(this);
     }
 
     public void setTextCartName(TextView textCartName) {
@@ -54,7 +57,13 @@ class  CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
 
     }
 
-}
+     @Override
+     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo)
+     {
+          contextMenu.setHeaderTitle("Select action ");
+          contextMenu.add(0,0,getAdapterPosition(),Common.DELETE);
+     }
+ }
 
 
 

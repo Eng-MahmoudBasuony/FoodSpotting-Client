@@ -19,4 +19,14 @@
     <string name="action_settings">Settings</string>
     <string name="placeOrder">Place Order</string>
     <string name="enter_your_food">Enter your Food</string>
+    <string name="refresh">Refresh</string>
+    <string name="remember_me">Remember my</string>
+    <string name="secure_code">Secure Code</string>
+    <string name="forget_password"> <u>Forgot Password ? </u> </string>
+    <string name="adress">Adress</string>
+    <string name="commment">Comment</string>
+    <string name="old_Password">Old Password</string>
+    <string name="new_Password">New Password</string>
+    <string name="repeat_Password">Repeat New Password</string>
+
 </resources>

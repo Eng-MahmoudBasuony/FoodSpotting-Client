@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.example.eng_mahnoud83coffey.embeatit.Model.Order;
+import com.google.firebase.database.Query;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class Database extends SQLiteAssetHelper
         Cursor c = qb.query(db, sqlSelect, null, null, null, null,null);
 
         List<Order> result = new ArrayList<>();
+
         if (c.moveToFirst()) {
             do {
                 result.add(new Order(c.getString(c.getColumnIndex("ProudactID")),
@@ -96,6 +98,52 @@ public class Database extends SQLiteAssetHelper
 
     }
 
+
+
+
+    //Add Food Favorites
+    public void addToFavorites(String foodId)
+    {
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query=String.format("INSERT INTO Favorites(foodId)VALUES('%s');",foodId);
+
+        db.execSQL(query);
+    }
+
+
+    //Remove Food Favorites
+    public void removeFavorites(String foodId)
+    {
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query=String.format("DELETE FROM Favorites WHERE foodId='%s';",foodId);
+
+        db.execSQL(query);
+
+    }
+
+
+    //Check Food DO add Favorites OR Not
+    public boolean isFoodFavorites(String foodId)
+    {
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query=String.format("SELECT * FROM Favorites WHERE foodId='%s';",foodId);
+
+        Cursor cursor=db.rawQuery(query,null);
+
+        if (cursor.getCount()<=0)
+        {
+            cursor.close();
+            return false;
+        }
+
+      return true;
+    }
 
 
 }

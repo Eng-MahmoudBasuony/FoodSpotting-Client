@@ -23,6 +23,14 @@
             android:icon="@drawable/icon_menu_time_black_24dp"
             android:iconTint="@android:color/white"
             android:title="Orders" />
+
+        <item
+            android:id="@+id/nav_change_pwd"
+            android:icon="@drawable/ic_security_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="Change Password"
+            />
+
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/icon_menu_exit_to_app_black_24dp"

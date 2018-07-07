@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,12 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 
 
 //Register Activity
-public class SignUp extends AppCompatActivity {
+public class SignUp extends AppCompatActivity
+{
 
 
     private TextInputEditText editUserName;
     private TextInputEditText editPhoneNumber;
     private TextInputEditText editPassword;
+    private TextInputEditText editSecureCode;
     private Button btnSignUp;
     private TextView textSignInHere;
     private TextView textHeaderSignUp;
@@ -51,9 +54,12 @@ public class SignUp extends AppCompatActivity {
         editUserName=(TextInputEditText)findViewById(R.id.Name_SignUp);
         editPassword=(TextInputEditText)findViewById(R.id.Password_SignUp);
         editPhoneNumber=(TextInputEditText)findViewById(R.id.Phone_Number_SignUp);
+        editSecureCode=(TextInputEditText)findViewById(R.id.secureCode_SignUp);
         textSignInHere=(TextView)findViewById(R.id.Text_SignIn_Here);
         textHeaderSignUp=(TextView)findViewById(R.id.textHeaderSignUp);
         btnSignUp=(Button)findViewById(R.id.Button_SignUp);
+
+
 
         progressDialog=new ProgressDialog(SignUp.this);
 
@@ -68,28 +74,27 @@ public class SignUp extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
 
-                progressDialog.setMessage("Please Wait....");
-                progressDialog.show();
 
-                table_User.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
-                    {
-                         //Check IF Alrady  User Phone
-                        if (dataSnapshot.child(editPhoneNumber.getText().toString()).exists())
-                        {
-                          progressDialog.dismiss();
-                            Toast.makeText(SignUp.this, "Phone Number Already Register !", Toast.LENGTH_SHORT).show();
+                if (Common.IsConnectedToInternet(getBaseContext())) {
 
-                        }else
-                            {
-                                                  //Storage Data On Model
-                                User user=new User(editUserName.getText().toString(),editPassword.getText().toString());
+                    progressDialog.setMessage("Please Wait....");
+                    progressDialog.show();
 
-                                               //Storage Data on FirebaseDataBase
+                    table_User.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            //Check IF Alrady  User Phone
+                            if (dataSnapshot.child(editPhoneNumber.getText().toString()).exists()) {
+                                progressDialog.dismiss();
+                                Toast.makeText(SignUp.this, "Phone Number Already Register !", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                //Storage Data On Model
+                                User user = new User(editUserName.getText().toString(), editPassword.getText().toString(),editSecureCode.getText().toString());
+
+                                //Storage Data on FirebaseDataBase
                                 table_User.child(editPhoneNumber.getText().toString()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -104,13 +109,18 @@ public class SignUp extends AppCompatActivity {
                             }
 
 
+                        }
 
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+
+            }else
+                {
+                    Toast.makeText(SignUp.this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+                }
 
 
             }

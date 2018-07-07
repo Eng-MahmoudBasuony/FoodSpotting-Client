@@ -1,9 +1,13 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,15 +27,24 @@ import android.widget.Toast;
 import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Category;
+import com.example.eng_mahnoud83coffey.embeatit.Model.Token;
 import com.example.eng_mahnoud83coffey.embeatit.ViewHolder.MenuVIewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
+
+import java.util.HashMap;
+import java.util.Map;
+import io.paperdb.Paper;
 
 
 //كلاس Activity الرئيسيه اللى بعد تسجيل الدخول -وبعرض فيها Table ال Category اللى هيا فئات الاطعمه
@@ -52,6 +65,8 @@ public class Home extends AppCompatActivity
     private Query query;
     private FirebaseRecyclerOptions<Category> options;
     private FirebaseRecyclerAdapter adapter;
+    //------------------
+    private ProgressDialog progressDialog;
 
 
 
@@ -64,36 +79,26 @@ public class Home extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Menu");
 
-
-
-
-
-
         //---------------------Firebase-----------------------//
         database=FirebaseDatabase.getInstance();
         category=database.getReference("Category");
 
-
-
+        //Init Paper
+        Paper.init(this);
 
         //---------------------------Id----------------------------//
          fab = (FloatingActionButton) findViewById(R.id.fab_home);
 
          recyclerViewMenu=(RecyclerView)findViewById(R.id.recyclerView);
-
-
-
-
+         progressDialog=new ProgressDialog(Home.this);
 
         //---------------------------Action Button-----------------------//
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
                 Intent cartIntent=new Intent(Home.this,Cart.class);
                       startActivity(cartIntent);
-
 
             }
         });
@@ -107,9 +112,6 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
-
        //--Set Name for User--//
          headerView=navigationView.getHeaderView(0);
 
@@ -122,18 +124,34 @@ public class Home extends AppCompatActivity
         layoutManager=new LinearLayoutManager(this);
         recyclerViewMenu.setLayoutManager(layoutManager);
 
-        loadMenu();
 
+        if (Common.IsConnectedToInternet(this))
+        {
+                loadMenu();
+        }
+        else
+            {
+                Toast.makeText(this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+            }
 
-
-
-
+      //Storage your Token app to FirebaseDatabse
+      updateToken(FirebaseInstanceId.getInstance().getToken());
 
     }
 
+     //Update Token
+    private void updateToken(String token)
+    {
+      FirebaseDatabase database=FirebaseDatabase.getInstance();
+      DatabaseReference reference=database.getReference("Tokens");
+
+        Token token1=new Token(token,false);
+
+        reference.child(Common.currentUser.getPhone()).setValue(token1);
+    }
 
 
-     //Method Load Data From FirebaseDatabse AND sen Data to RecyclerView
+    //Method Load Data From FirebaseDatabse AND sen Data to RecyclerView
     private void loadMenu()
     {
 
@@ -262,6 +280,10 @@ public class Home extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        if (item.getItemId()==R.id.menu_refersh)
+        {
+         loadMenu();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -273,7 +295,7 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_menu) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_cart)
         {
           Intent intentCart=new Intent(Home.this,Cart.class);
@@ -286,15 +308,111 @@ public class Home extends AppCompatActivity
 
         } else if (id == R.id.nav_logout)
         {
-          //LogOut
+
+            //Delete Remember User & Password
+            Paper.book().destroy();
+
+            //LogOut
             Intent  intentSignIn=new Intent(Home.this,SignIn.class);
                     intentSignIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intentSignIn);
 
+        }else if (id==R.id.nav_change_pwd)
+        {
+            showChangePasswordDialog();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+    private void showChangePasswordDialog()
+    {   //Change Password
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(Home.this);
+
+                           alertDialog.setTitle("Change Password");
+                           alertDialog.setMessage("Please Fill All Information");
+
+        View  inflateView=this.getLayoutInflater().inflate(R.layout.change_password_dialog,null);
+
+        final TextInputEditText editOldPassword=(TextInputEditText)inflateView.findViewById(R.id.old_password_ChangePassword);
+        final TextInputEditText editNewPassword=(TextInputEditText)inflateView.findViewById(R.id.new_password_ChangePassword);
+        final TextInputEditText editRepeatNewPassword=(TextInputEditText)inflateView.findViewById(R.id.repeat_password_ChangePassword);
+
+        alertDialog.setView(inflateView);
+
+
+        alertDialog.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                progressDialog.setTitle("Please Wait...");
+                progressDialog.setMessage("Please Wait Please update your password");
+                progressDialog.show();
+
+              //Check Old Password
+                if (editOldPassword.getText().toString().equals(Common.currentUser.getPassword()))
+                {
+                       //Check New Password And Repeat Password
+                    if (editNewPassword.getText().toString().equals(editRepeatNewPassword.getText().toString()))
+                    {
+
+                        Map<String,Object> passwordUpdate=new HashMap<>();
+                        passwordUpdate.put("Password",editNewPassword.getText().toString());
+
+                        //Make Update
+                        DatabaseReference user=FirebaseDatabase.getInstance().getReference("User");
+
+                             user.child(Common.currentUser.getPhone()).updateChildren(passwordUpdate)
+                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                     @Override
+                                                     public void onComplete(@NonNull Task<Void> task)
+                                                     {
+                                                         progressDialog.dismiss();
+                                                         Toast.makeText(Home.this, "Password Updated SuccessFull", Toast.LENGTH_SHORT).show();
+                                                     }
+                                                 })
+                                     .addOnFailureListener(new OnFailureListener()
+                             {
+                                 @Override
+                                 public void onFailure(@NonNull Exception e)
+                                 {
+                                     progressDialog.dismiss();
+                                     Toast.makeText(Home.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                 }
+                             });
+                             
+                    }else 
+                        {
+                            progressDialog.dismiss();
+                            Toast.makeText(Home.this, "new Password does not Match !!!", Toast.LENGTH_SHORT).show();
+                        }
+
+                }else
+                    {
+                        progressDialog.dismiss();
+                        Toast.makeText(Home.this, "Wrong Password !!!", Toast.LENGTH_SHORT).show();
+                    }
+
+            }
+        });
+
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                dialogInterface.dismiss();
+            }
+        });
+
+
+        alertDialog.show();
+    }
+
+
 }

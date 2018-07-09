@@ -1,6 +1,8 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
 import android.content.Intent;
+
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +13,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+
 import android.widget.Toast;
 
 import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
@@ -19,6 +21,7 @@ import com.example.eng_mahnoud83coffey.embeatit.Database.Database;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Food;
 import com.example.eng_mahnoud83coffey.embeatit.ViewHolder.FoodViewHolder;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
-import com.squareup.picasso.Callback;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -56,6 +59,7 @@ public class FoodList extends AppCompatActivity {
     //----------------------------------
      Database localDatabe;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -72,7 +76,6 @@ public class FoodList extends AppCompatActivity {
             //------------------Firebase-------------------------//
           database=FirebaseDatabase.getInstance();
           foodList =database.getReference("Foods");
-
 
         //------------------Recycler View------------------//
         recyclerViewFoods.setHasFixedSize(true);
@@ -308,6 +311,9 @@ public class FoodList extends AppCompatActivity {
             protected void onBindViewHolder(final FoodViewHolder holder, final int position, final Food model) {
                 // Bind the Chat object to the ChatHolder
 
+                //Send Image  to Recyclerview
+               // holder.shareImage.setImageResource(R.drawable.ic_share_black_24dp);
+
                 //Send Image Name to Recyclerview
                 holder.textFoodName.setText(model.getName());
 
@@ -319,6 +325,34 @@ public class FoodList extends AppCompatActivity {
                         .into(holder.foodimageView);
 
                 final Food clickItem=model;
+
+
+                // Click to Share
+                holder.shareImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        /*Picasso.get()
+                                .load(model.getImage())
+                                .into(target);*/
+                        Toast.makeText(FoodList.this, " d", Toast.LENGTH_SHORT).show();
+
+                        // مكان الصورة التي تريد مشاركتها بعد الضغط على الزر
+                        // com.andrody.first_app غيره بإسم الباكيج لديك + عدل اسم الصورة حسب الموجود عندك
+                        Uri uri = Uri.parse("com.example.eng_mahnoud83coffey.embeatit"+ model.getName());
+                        // تعيين الاجراء الذي نريده وهنا ارسال بيانات
+                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                        // اضافة uri وهو في الاعلى الصورة الى البيانات التي سوف يتم جلبها
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                        // تعيين نوع البيانات التي تريد ارسالها وهنا النوع هو صورة
+                        sendIntent.setType("image/*");
+                        // تشغيل الانتنت السابق بالاضافة إلى تعيين النص الذي يظهر عند اختيار التطبيق الذي تريد مشاركة معه
+                        startActivity(Intent.createChooser(sendIntent,"اختار التطبيق الذي مشاركة الصورة معه :"));
+
+
+
+                    }
+                });
 
 
 

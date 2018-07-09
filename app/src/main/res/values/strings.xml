@@ -29,4 +29,8 @@
     <string name="new_Password">New Password</string>
     <string name="repeat_Password">Repeat New Password</string>
 
+
+    <string name="facebook_app_id">2124901041128674</string>
+    <string name="facebook_login_protocol_name">fb2124901041128674</string>
+
 </resources>

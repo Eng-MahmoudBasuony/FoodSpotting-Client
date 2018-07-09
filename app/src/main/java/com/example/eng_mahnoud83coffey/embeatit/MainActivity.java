@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-             //Key Hashes or علامات تجزئة مفتاحية
-             printKeyHASH();
 
         //---------------ID------------------------//
         textSlogn=(TextView)findViewById(R.id.txtslogn);
@@ -117,27 +115,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void printKeyHASH()
-    {
-        try {
-
-            PackageInfo  info=getPackageManager().getPackageInfo("com.example.eng_mahnoud83coffey.embeatit", PackageManager.GET_SIGNATURES);
-
-            for (Signature signature:info.signatures)
-            {
-                MessageDigest md=MessageDigest.getInstance("SHA");
-                   md.update(signature.toByteArray());
-                Log.d("KeyHash", Base64.encodeToString(md.digest(),Base64.DEFAULT));
-                // f3xj4WWhBGbKJGytb5Qkqo0Ghx0=
-
-            }
-
-          } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void login(final String phone, final String pwd)

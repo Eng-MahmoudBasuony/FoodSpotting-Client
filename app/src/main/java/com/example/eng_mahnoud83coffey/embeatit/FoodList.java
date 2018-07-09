@@ -1,8 +1,13 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
+import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Toast;
+
 
 import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Database.Database;
@@ -33,9 +39,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.internal.Util;
 
 public class FoodList extends AppCompatActivity {
 
@@ -332,25 +344,8 @@ public class FoodList extends AppCompatActivity {
                     @Override
                     public void onClick(View view)
                     {
-                        /*Picasso.get()
-                                .load(model.getImage())
-                                .into(target);*/
-                        Toast.makeText(FoodList.this, " d", Toast.LENGTH_SHORT).show();
 
-                        // مكان الصورة التي تريد مشاركتها بعد الضغط على الزر
-                        // com.andrody.first_app غيره بإسم الباكيج لديك + عدل اسم الصورة حسب الموجود عندك
-                        Uri uri = Uri.parse("com.example.eng_mahnoud83coffey.embeatit"+ model.getName());
-                        // تعيين الاجراء الذي نريده وهنا ارسال بيانات
-                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                        // اضافة uri وهو في الاعلى الصورة الى البيانات التي سوف يتم جلبها
-                        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                        // تعيين نوع البيانات التي تريد ارسالها وهنا النوع هو صورة
-                        sendIntent.setType("image/*");
-                        // تشغيل الانتنت السابق بالاضافة إلى تعيين النص الذي يظهر عند اختيار التطبيق الذي تريد مشاركة معه
-                        startActivity(Intent.createChooser(sendIntent,"اختار التطبيق الذي مشاركة الصورة معه :"));
-
-
-
+                        shareItem(model.getImage(),clickItem);
                     }
                 });
 
@@ -421,6 +416,52 @@ public class FoodList extends AppCompatActivity {
     }
 
 
+
+
+
+
+    //Use Picasso to load the url into a Bitmap
+    public void shareItem(String url, final Food food) {
+
+        Picasso.get().load(url).into(new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("image/*");
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap,food));
+                i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/developer?id=MBasuony_JA");
+               startActivity(Intent.createChooser(i, "Share link "));
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable)
+            {
+                Toast.makeText(FoodList.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+        });
+    }
+    //Convert Bitmap into Uri
+    public Uri getLocalBitmapUri(Bitmap bmp,Food food) {
+
+        Uri bmpUri = null;
+
+        try {
+
+            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Name Food"+food.getName() +"Description : "+food.getDescription() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
 }
 
 

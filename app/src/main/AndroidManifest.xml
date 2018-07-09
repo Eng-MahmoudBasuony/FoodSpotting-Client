@@ -13,8 +13,6 @@
         android:theme="@style/AppTheme">
 
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-             android:value="@string/facebook_app_id"/>
 
 
         <activity android:name=".MainActivity">
@@ -50,9 +48,6 @@
         </service>
 
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider2124901041128674"
-            android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
 
 
     </application>

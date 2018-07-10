@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.eng_mahnoud83coffey.embeatit"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -71,6 +71,8 @@ dependencies {
     //Library AlertDialog with moving dots progress indicator
    // implementation 'com.github.d-max:spots-dialog:1.1@aar'
 
+    //The PayPal Android SDK
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

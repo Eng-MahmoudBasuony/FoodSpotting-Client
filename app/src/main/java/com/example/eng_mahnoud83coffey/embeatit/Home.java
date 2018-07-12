@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,21 +29,28 @@ import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Category;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Token;
+import com.example.eng_mahnoud83coffey.embeatit.ViewHolder.AdabterHome;
 import com.example.eng_mahnoud83coffey.embeatit.ViewHolder.MenuVIewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import io.paperdb.Paper;
 
@@ -62,11 +70,15 @@ public class Home extends AppCompatActivity
     private RecyclerView recyclerViewMenu;
     private RecyclerView.LayoutManager layoutManager;
     //--------Firebase UI--------//
-    private Query query;
-    private FirebaseRecyclerOptions<Category> options;
-    private FirebaseRecyclerAdapter adapter;
+    //private Query query;
+   // private FirebaseRecyclerOptions<Category> options;
+   // private FirebaseRecyclerAdapter adapter;
     //------------------
     private ProgressDialog progressDialog;
+    private SwipeRefreshLayout swipeRefresh;
+    //---------------------------------------------
+    private AdabterHome adabterHome;
+    private List<Category>categories;
 
 
 
@@ -79,6 +91,7 @@ public class Home extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Menu");
 
+         categories=new ArrayList<>();
         //---------------------Firebase-----------------------//
         database=FirebaseDatabase.getInstance();
         category=database.getReference("Category");
@@ -88,11 +101,17 @@ public class Home extends AppCompatActivity
 
         //---------------------------Id----------------------------//
          fab = (FloatingActionButton) findViewById(R.id.fab_home);
+        // swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.SwipeHome_Refresh);
 
          recyclerViewMenu=(RecyclerView)findViewById(R.id.recyclerView);
          progressDialog=new ProgressDialog(Home.this);
+        //--Load Menu--//
+        recyclerViewMenu.setHasFixedSize(true);
+        layoutManager=new LinearLayoutManager(this);
+        recyclerViewMenu.setLayoutManager(layoutManager);
 
-        //---------------------------Action Button-----------------------//
+
+        //---------------------------Event-----------------------//
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,6 +121,59 @@ public class Home extends AppCompatActivity
 
             }
         });
+
+        if (Common.IsConnectedToInternet(this))
+        {
+            loadMenu();
+        }
+        else
+        {
+            Toast.makeText(this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+        }
+
+/*
+
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimaryDark,
+                                             android.R.color.holo_green_dark,
+                                             android.R.color.holo_orange_dark,
+                                             android.R.color.holo_blue_dark);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh()
+            {
+                if (Common.IsConnectedToInternet(getApplicationContext()))
+                {
+                    loadMenu();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+*/
+
+
+     /* //Defaulet ,Load First Time
+     swipeRefresh.post(new Runnable() {
+         @Override
+         public void run()
+         {
+
+             if (Common.IsConnectedToInternet(getApplicationContext()))
+             {
+                 loadMenu();
+             }
+             else
+             {
+                 Toast.makeText(getApplicationContext(), "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+             }
+
+         }
+     })*/;
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
          ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -115,24 +187,14 @@ public class Home extends AppCompatActivity
        //--Set Name for User--//
          headerView=navigationView.getHeaderView(0);
 
-         textFullName=(TextView)headerView.findViewById(R.id.text_Full_Name_User);
+        textFullName=(TextView)headerView.findViewById(R.id.text_Full_Name_User);
 
         textFullName.setText(Common.currentUser.getName());
 
-        //--Load Menu--//
-        recyclerViewMenu.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(this);
-        recyclerViewMenu.setLayoutManager(layoutManager);
 
 
-        if (Common.IsConnectedToInternet(this))
-        {
-                loadMenu();
-        }
-        else
-            {
-                Toast.makeText(this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
-            }
+
+
 
       //Storage your Token app to FirebaseDatabse
       updateToken(FirebaseInstanceId.getInstance().getToken());
@@ -151,22 +213,18 @@ public class Home extends AppCompatActivity
     }
 
 
+/*
     //Method Load Data From FirebaseDatabse AND sen Data to RecyclerView
     private void loadMenu()
     {
-
-
         //---Using Firebase UI to populate a RecyclerView--------//
         query= FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Category");
-
-          query.keepSynced(true);//Load Data OffLine
-
+         // query.keepSynced(true);//Load Data OffLine
         options = new FirebaseRecyclerOptions.Builder<Category>()
                 .setQuery(query, Category.class)
                 .build();
-
         adapter = new FirebaseRecyclerAdapter<Category, MenuVIewHolder>(options) {
             @Override
             public MenuVIewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -174,10 +232,8 @@ public class Home extends AppCompatActivity
                 // layout called R.layout.message for each item
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.menu_item, parent, false);
-
                 return new MenuVIewHolder(view);
             }
-
             @Override
             protected void onBindViewHolder(final MenuVIewHolder holder, final int position, final Category model) {
                 // Bind the Chat object to the ChatHolder
@@ -194,7 +250,6 @@ public class Home extends AppCompatActivity
                         {
                             @Override
                             public void onSuccess() {//لو الصوره اتحملت offline بنجاح
-
                             }
                             @Override
                             public void onError(Exception e)
@@ -207,39 +262,70 @@ public class Home extends AppCompatActivity
                             }
                         });
 
-
                   final Category clickItem=model;
-
 
                 //لما المستخدم يضغط على اى صف
                  holder.setItemClickListener(new ItemClickListener() {
-
                      @Override
                      public void onClick(View view, int position, boolean isLongClick)
                      {
                           //Get CategoryId and send to new Activity
-
                          Intent foodsListIntent=new Intent(Home.this,FoodList.class);
-
                                foodsListIntent.putExtra("CategoryId",adapter.getRef(position).getKey());//Just Get Key Of item
                                startActivity(foodsListIntent);
-
-
                       }
                  });
-
-
-
             }//end OnBind
-
-
         };//end Adapter
-
         recyclerViewMenu.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        swipeRefresh.setRefreshing(false);
     }
+*/
 
 
-     //Start Adapter
+private void loadMenu()
+{
+
+    category.addValueEventListener(new ValueEventListener() {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+        {
+
+              categories.clear();
+
+            for (DataSnapshot snapshot:dataSnapshot.getChildren())
+            {
+                 Category category   =snapshot.getValue(Category.class);
+
+                 categories.add(category);
+
+            }
+
+            adabterHome=new AdabterHome(Home.this,categories);
+            recyclerViewMenu.setAdapter(adabterHome);
+            adabterHome.notifyDataSetChanged();
+
+            // إذا أردنا عرض العناصر الحديثة من الأعلى (بمعنى أنه أي عنصر جديد يتم إضافته يظهر في الأعلى)
+            //فقط نقوم بعكس ال List عبر الميثود
+            //Collections.reverse(categories);
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError)
+        {
+
+        }
+    });
+}
+
+
+
+
+
+  /*   //Start Adapter
    @Override
     protected void onStart() {
         super.onStart();
@@ -256,7 +342,7 @@ public class Home extends AppCompatActivity
     }
 
 
-
+*/
 
 
 

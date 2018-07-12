@@ -5,7 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FoodList">
+    tools:context=".FoodList"
+    android:id="@+id/swipe_foodlist_refresh"
+    >
+
+
+
+
+
 
  <com.mancj.materialsearchbar.MaterialSearchBar
      android:id="@+id/search_Bar_FoodList"

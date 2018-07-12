@@ -3,6 +3,9 @@ package com.example.eng_mahnoud83coffey.embeatit;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -79,6 +82,7 @@ public class Home extends AppCompatActivity
     //---------------------------------------------
     private AdabterHome adabterHome;
     private List<Category>categories;
+    //---------------------------------------------
 
 
 
@@ -101,7 +105,8 @@ public class Home extends AppCompatActivity
 
         //---------------------------Id----------------------------//
          fab = (FloatingActionButton) findViewById(R.id.fab_home);
-        // swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.SwipeHome_Refresh);
+
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.SwipeHome_Refresh);
 
          recyclerViewMenu=(RecyclerView)findViewById(R.id.recyclerView);
          progressDialog=new ProgressDialog(Home.this);
@@ -131,16 +136,42 @@ public class Home extends AppCompatActivity
             Toast.makeText(this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
         }
 
-/*
+        // the colors and size of the loader.
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimaryDark,//This method will rotate
+                                             android.R.color.holo_green_dark, //colors given to it when
+                                             android.R.color.holo_orange_dark, //loader continues to
+                                             android.R.color.holo_blue_dark);//refresh.
+        //setSize() Method Sets The Size Of Loader
+        swipeRefresh.setSize(SwipeRefreshLayout.LARGE);
+        //Below Method Will set background color of Loader
+        swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.white);
 
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimaryDark,
-                                             android.R.color.holo_green_dark,
-                                             android.R.color.holo_orange_dark,
-                                             android.R.color.holo_blue_dark);
+
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
             @Override
             public void onRefresh()
             {
+               //set up MediaPlayer
+
+             /* Uri uriDefaultSound= RingtoneManager.getDefaultUri(R.raw.messengerrefreshsound);
+                try {
+                    MediaPlayer mp=MediaPlayer.create(getApplicationContext(),R.raw.messengerrefreshsound);// the song is a filename which i have pasted inside a folder **raw** created under the **res** folder.//
+                    mp.prepare();
+                    mp.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+              MediaPlayer  mMediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.messengerrefreshsound);
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        onStop();
+                    }
+                });
+                mMediaPlayer.start();
+
+
                 if (Common.IsConnectedToInternet(getApplicationContext()))
                 {
                     loadMenu();
@@ -152,10 +183,11 @@ public class Home extends AppCompatActivity
 
             }
         });
-*/
 
 
-     /* //Defaulet ,Load First Time
+       //Defaulet ,Load First Time
+     swipeRefresh.setRefreshing(true);
+
      swipeRefresh.post(new Runnable() {
          @Override
          public void run()
@@ -171,7 +203,7 @@ public class Home extends AppCompatActivity
              }
 
          }
-     })*/;
+     });
 
 
 
@@ -306,10 +338,10 @@ private void loadMenu()
             adabterHome=new AdabterHome(Home.this,categories);
             recyclerViewMenu.setAdapter(adabterHome);
             adabterHome.notifyDataSetChanged();
-
+            swipeRefresh.setRefreshing(false);
             // إذا أردنا عرض العناصر الحديثة من الأعلى (بمعنى أنه أي عنصر جديد يتم إضافته يظهر في الأعلى)
             //فقط نقوم بعكس ال List عبر الميثود
-            //Collections.reverse(categories);
+             Collections.reverse(categories);
 
         }
 

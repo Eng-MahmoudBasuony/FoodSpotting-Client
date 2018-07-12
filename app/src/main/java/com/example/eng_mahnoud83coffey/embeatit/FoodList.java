@@ -71,8 +71,7 @@ public class FoodList extends AppCompatActivity {
 
     //----------------------------------
      Database localDatabe;
-    //------------------------
-    //private SwipeRefreshLayout swipeRefresh;
+
 
 
 
@@ -86,9 +85,6 @@ public class FoodList extends AppCompatActivity {
           //-------------------Id----------------------------//
          recyclerViewFoods=(RecyclerView)findViewById(R.id.recyclerView_food);
          materialSearchBar=(MaterialSearchBar)findViewById(R.id.search_Bar_FoodList);//---Search*/
-        //swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swipe_foodlist_refresh);
-
-
 
             //------------------Firebase-------------------------//
           database=FirebaseDatabase.getInstance();
@@ -196,63 +192,7 @@ public class FoodList extends AppCompatActivity {
 
 
         //-------------------Event--------------------------//
-        /*swipeRefresh.setColorSchemeResources(R.color.colorPrimaryDark,
-                                             android.R.color.holo_green_dark,
-                                             android.R.color.holo_orange_dark,
-                                             android.R.color.holo_blue_dark);
-*/
-        /*swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh()
-            {
-                //-----------------Get Intent Here-----------------//
-                if (getIntent() != null)
-                {
-                    categoryId=getIntent().getStringExtra("CategoryId");
 
-                    if (! categoryId.isEmpty() && categoryId !=null)
-                    {
-                        if (Common.IsConnectedToInternet(getApplicationContext()))
-                        {
-                            //Load Data on RecyclerView
-                            loadListFoods(categoryId);
-
-                        }else
-                        {
-                            Toast.makeText(getApplicationContext(), "Please Check Your Connection", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }
-        });
-
-
-        swipeRefresh.post(new Runnable() {
-            @Override
-            public void run()
-            {
-                //-----------------Get Intent Here-----------------//
-                if (getIntent() != null)
-                {
-                    categoryId=getIntent().getStringExtra("CategoryId");
-
-                    if (! categoryId.isEmpty() && categoryId !=null)
-                    {
-                        if (Common.IsConnectedToInternet(getApplicationContext()))
-                        {
-                            //Load Data on RecyclerView
-                            loadListFoods(categoryId);
-                        }else
-                        {
-                            Toast.makeText(getApplicationContext(), "Please Check Your Connection", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }
-        });
-
-
-*/
 
     }
 

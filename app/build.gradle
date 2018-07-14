@@ -74,5 +74,8 @@ dependencies {
     //The PayPal Android SDK
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
+     // library custom font Calligraphy
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

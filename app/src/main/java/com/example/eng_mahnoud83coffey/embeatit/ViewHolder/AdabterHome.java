@@ -2,6 +2,7 @@ package com.example.eng_mahnoud83coffey.embeatit.ViewHolder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+
+ //Adabter Home Activity
 public class AdabterHome extends RecyclerView.Adapter<AdabterHome.ViewHolderHome>
 {
 
@@ -81,6 +84,7 @@ public class AdabterHome extends RecyclerView.Adapter<AdabterHome.ViewHolderHome
 
           menu_name=(TextView)itemView.findViewById(R.id.menu_name);
           menu_Image=(ImageView)itemView.findViewById(R.id.menu_image);
+
 
           itemView.setOnClickListener(new View.OnClickListener() {
               @Override

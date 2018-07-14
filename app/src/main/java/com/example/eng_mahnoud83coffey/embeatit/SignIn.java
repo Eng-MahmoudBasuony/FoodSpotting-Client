@@ -1,5 +1,6 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -25,6 +26,8 @@ import com.example.eng_mahnoud83coffey.embeatit.Model.User;
 import com.rey.material.widget.CheckBox;
 
 import io.paperdb.Paper;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 // Login Activity
@@ -45,10 +48,24 @@ public class SignIn extends AppCompatActivity {
     //-----------Firebase-----------------
     private FirebaseDatabase database;
     private DatabaseReference table_User;
+
+    //Library Custom font
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_sign_in);
 
 

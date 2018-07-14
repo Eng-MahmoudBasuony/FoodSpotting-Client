@@ -1,5 +1,6 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +32,9 @@ import com.stepstone.apprating.listener.RatingDialogListener;
 
 import java.util.Arrays;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 //الكلاس المسؤل عن عرض وصف عن الطعام وامكانيه اضافه الطعام لسله المشتريات التى ستخزن فى SQlite
 //1- عرض وصف للطعام وسعره وكذا
@@ -53,10 +57,25 @@ public class FoodDetails extends AppCompatActivity implements RatingDialogListen
     private DatabaseReference table_Foods;
     private DatabaseReference table_Rating;
 
+
+    //Library Custom font
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_food_details);
 
         //-----------------------Id-------------------------//

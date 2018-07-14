@@ -17,6 +17,7 @@ public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public ImageView foodimageView;
     public ImageView favimage;
     public ImageView shareImage;
+    public TextView textFoodPrice;
     //-------------------------
     private ItemClickListener itemClickListener;// Interface
 
@@ -34,6 +35,9 @@ public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         foodimageView=(ImageView)itemView.findViewById(R.id.food_image);
         favimage=(ImageView)itemView.findViewById(R.id.fav_imageFood);
         shareImage=(ImageView)itemView.findViewById(R.id.share_imageFood);
+        textFoodPrice=(TextView)itemView.findViewById(R.id.food_price_foodList);
+
+
 
         itemView.setOnClickListener(this);
     }

@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.internal.Util;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FoodList extends AppCompatActivity {
 
@@ -74,11 +76,22 @@ public class FoodList extends AppCompatActivity {
 
 
 
-
+    //Library Custom font
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_food_list);
 
 
@@ -330,6 +343,7 @@ public class FoodList extends AppCompatActivity {
 
                 //Send Image Name to Recyclerview
                 holder.textFoodName.setText(model.getName());
+                holder.textFoodPrice.setText(String.format("$ %s",model.getPrice()));
 
                 //Send Image  to Recyclerview
                 Picasso.get()
@@ -368,8 +382,11 @@ public class FoodList extends AppCompatActivity {
                         {
                              //Add Favorites
                             localDatabe.addToFavorites(adapter.getRef(position).getKey());
+
                             holder.favimage.setImageResource(R.drawable.ic_favorite_black_24dp);
+
                             Toast.makeText(FoodList.this, model.getName()+" was add Favorites", Toast.LENGTH_SHORT).show();
+
                         }else
                             { //IF FOOD Favorites
                                     //Remove Food Favorites

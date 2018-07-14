@@ -1,6 +1,7 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,6 +58,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import io.paperdb.Paper;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 //كلاس Activity الرئيسيه اللى بعد تسجيل الدخول -وبعرض فيها Table ال Category اللى هيا فئات الاطعمه
@@ -85,10 +89,22 @@ public class Home extends AppCompatActivity
     //---------------------------------------------
 
 
-
+    //Library Custom font
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,10 +126,13 @@ public class Home extends AppCompatActivity
 
          recyclerViewMenu=(RecyclerView)findViewById(R.id.recyclerView);
          progressDialog=new ProgressDialog(Home.this);
-        //--Load Menu--//
+
+         //--Load Menu--//
         recyclerViewMenu.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(this);
-        recyclerViewMenu.setLayoutManager(layoutManager);
+        // layoutManager=new LinearLayoutManager(this);
+        //recyclerViewMenu.setLayoutManager(layoutManager);
+        recyclerViewMenu.setLayoutManager(new GridLayoutManager(this,2));
+
 
 
         //---------------------------Event-----------------------//

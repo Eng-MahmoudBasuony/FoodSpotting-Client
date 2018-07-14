@@ -1,6 +1,7 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -22,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 //Register Activity
 public class SignUp extends AppCompatActivity
@@ -41,12 +45,23 @@ public class SignUp extends AppCompatActivity
    //-------------------------------------
     private FirebaseDatabase database;
     private DatabaseReference table_User;
-
+    //Library Custom font
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_sign_up);
 
 

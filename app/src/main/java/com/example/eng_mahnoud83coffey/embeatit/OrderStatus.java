@@ -1,5 +1,6 @@
 package com.example.eng_mahnoud83coffey.embeatit;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,9 @@ import com.google.firebase.database.Query;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class OrderStatus extends AppCompatActivity {
 
     private RecyclerView recyclerViewOrderStatus;
@@ -36,12 +40,23 @@ public class OrderStatus extends AppCompatActivity {
     private FirebaseRecyclerAdapter adapter;
 
 
-
+    //Library Custom font
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_order_status);
 
 

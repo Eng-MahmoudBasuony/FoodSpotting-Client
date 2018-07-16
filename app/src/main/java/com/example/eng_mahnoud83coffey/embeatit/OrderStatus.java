@@ -92,18 +92,20 @@ public class OrderStatus extends AppCompatActivity {
     private void loadOrderStatus(String phone)
     {
 
+/*
 
             //---Using Firebase UI to populate a RecyclerView--------//
-            query = FirebaseDatabase.getInstance()
+           Query query = FirebaseDatabase.getInstance()
                     .getReference()
                     .child("Requests").orderByChild("phone").equalTo(phone);
 
             //.orderByChild("phone").equalTo(phone)
+*/
 
-            query.keepSynced(true);//Load Data OffLine
+        Query getOrderByUser = table_requests.orderByChild("phone").equalTo(phone);
 
             options = new FirebaseRecyclerOptions.Builder<Request>()
-                    .setQuery(query, Request.class)
+                    .setQuery(getOrderByUser, Request.class)
                     .build();
 
             adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(options) {
@@ -149,6 +151,7 @@ public class OrderStatus extends AppCompatActivity {
 
             };//end Adapter
 
+            adapter.startListening();
             recyclerViewOrderStatus.setAdapter(adapter);
 
 

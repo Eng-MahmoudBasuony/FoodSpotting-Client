@@ -58,7 +58,7 @@
 
 
 
-        <android.support.design.widget.FloatingActionButton
+        <com.andremion.counterfab.CounterFab
             android:id="@+id/btnCart_foodDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -94,7 +94,7 @@ public class AdabterHome extends RecyclerView.Adapter<AdabterHome.ViewHolderHome
 
                   Intent intent=new Intent(context, FoodList.class);
 
-               intent.putExtra("CategoryName",category.getName());
+               intent.putExtra("CategoryId",category.getId());
 
                   context.startActivity(intent);
 

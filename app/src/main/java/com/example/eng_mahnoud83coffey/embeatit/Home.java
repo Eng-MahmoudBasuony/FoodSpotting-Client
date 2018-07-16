@@ -27,10 +27,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
+import com.example.eng_mahnoud83coffey.embeatit.Database.Database;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Category;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Token;
@@ -71,7 +75,7 @@ public class Home extends AppCompatActivity
     private DatabaseReference category;
     //--------------------------------
     private TextView textFullName;
-    private  FloatingActionButton fab;
+    private CounterFab fab;
     private View headerView;
     //-------------------------------
     private RecyclerView recyclerViewMenu;
@@ -98,18 +102,20 @@ public class Home extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Library Custom font
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/restaurant_font.otf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+
 
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Menu");
+
+        //Library Custom font
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/restaurant_font.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
 
          categories=new ArrayList<>();
         //---------------------Firebase-----------------------//
@@ -120,18 +126,23 @@ public class Home extends AppCompatActivity
         Paper.init(this);
 
         //---------------------------Id----------------------------//
-         fab = (FloatingActionButton) findViewById(R.id.fab_home);
-
+         fab = (CounterFab)findViewById(R.id.fab_home);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.SwipeHome_Refresh);
-
          recyclerViewMenu=(RecyclerView)findViewById(R.id.recyclerView);
          progressDialog=new ProgressDialog(Home.this);
 
+
          //--Load Menu--//
-        recyclerViewMenu.setHasFixedSize(true);
+        // recyclerViewMenu.setHasFixedSize(true);
         // layoutManager=new LinearLayoutManager(this);
         //recyclerViewMenu.setLayoutManager(layoutManager);
         recyclerViewMenu.setLayoutManager(new GridLayoutManager(this,2));
+
+        LayoutAnimationController controller= AnimationUtils.loadLayoutAnimation(recyclerViewMenu.getContext(),R.anim.animation_fall_down);
+        recyclerViewMenu.setLayoutAnimation(controller);
+
+
+
 
 
 
@@ -145,6 +156,8 @@ public class Home extends AppCompatActivity
 
             }
         });
+
+        fab.setCount(new Database(this).getCountCart());
 
         if (Common.IsConnectedToInternet(this))
         {
@@ -349,7 +362,7 @@ private void loadMenu()
             for (DataSnapshot snapshot:dataSnapshot.getChildren())
             {
                  Category category   =snapshot.getValue(Category.class);
-
+                 category.setId(snapshot.getKey());
                  categories.add(category);
 
             }
@@ -358,6 +371,8 @@ private void loadMenu()
             recyclerViewMenu.setAdapter(adabterHome);
             adabterHome.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
+            recyclerViewMenu.getAdapter().notifyDataSetChanged();
+            recyclerViewMenu.scheduleLayoutAnimation();
             // إذا أردنا عرض العناصر الحديثة من الأعلى (بمعنى أنه أي عنصر جديد يتم إضافته يظهر في الأعلى)
             //فقط نقوم بعكس ال List عبر الميثود
              Collections.reverse(categories);
@@ -465,6 +480,11 @@ private void loadMenu()
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+     fab.setCount(new Database(this).getCountCart());
+    }
 
     private void showChangePasswordDialog()
     {   //Change Password

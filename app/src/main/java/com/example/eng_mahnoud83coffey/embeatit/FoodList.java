@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,6 +28,7 @@ import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Database.Database;
 import com.example.eng_mahnoud83coffey.embeatit.Interface.ItemClickListener;
 import com.example.eng_mahnoud83coffey.embeatit.Model.Food;
+import com.example.eng_mahnoud83coffey.embeatit.Model.Order;
 import com.example.eng_mahnoud83coffey.embeatit.ViewHolder.FoodViewHolder;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -61,7 +63,7 @@ public class FoodList extends AppCompatActivity {
     private RecyclerView recyclerViewFoods;
     private RecyclerView.LayoutManager layoutManager;
     //--------Firebase UI--------//
-    private Query query;
+    private Query searchByName;
     private FirebaseRecyclerOptions<Food> options;
     private FirebaseRecyclerAdapter<Food,FoodViewHolder> adapter;
     //--------------------------------------
@@ -70,6 +72,7 @@ public class FoodList extends AppCompatActivity {
     List<String> suggestList =new ArrayList<>();
     MaterialSearchBar materialSearchBar;
     private FirebaseRecyclerAdapter<Food,FoodViewHolder> searchAdapter;
+    private SwipeRefreshLayout swipeRefresh;
 
     //----------------------------------
      Database localDatabe;
@@ -95,9 +98,13 @@ public class FoodList extends AppCompatActivity {
         setContentView(R.layout.activity_food_list);
 
 
+
+
           //-------------------Id----------------------------//
          recyclerViewFoods=(RecyclerView)findViewById(R.id.recyclerView_food);
          materialSearchBar=(MaterialSearchBar)findViewById(R.id.search_Bar_FoodList);//---Search*/
+         swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swipe_foodlist_refresh);
+
 
             //------------------Firebase-------------------------//
           database=FirebaseDatabase.getInstance();
@@ -114,7 +121,7 @@ public class FoodList extends AppCompatActivity {
         //-----------------Get Intent Here-----------------//
          if (getIntent() != null)
          {
-             categoryId=getIntent().getStringExtra("CategoryName");
+             categoryId=getIntent().getStringExtra("CategoryId");
 
 
               if (! categoryId.isEmpty() && categoryId !=null)
@@ -207,6 +214,75 @@ public class FoodList extends AppCompatActivity {
         //-------------------Event--------------------------//
 
 
+        // the colors and size of the loader.
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimaryDark,//This method will rotate
+                android.R.color.holo_green_dark, //colors given to it when
+                android.R.color.holo_orange_dark, //loader continues to
+                android.R.color.holo_blue_dark);//refresh.
+        //setSize() Method Sets The Size Of Loader
+        swipeRefresh.setSize(SwipeRefreshLayout.LARGE);
+        //Below Method Will set background color of Loader
+        swipeRefresh.setProgressBackgroundColorSchemeResource(R.color.white);
+
+
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh()
+            {
+                //set up MediaPlayer
+
+             /* Uri uriDefaultSound= RingtoneManager.getDefaultUri(R.raw.messengerrefreshsound);
+                try {
+                    MediaPlayer mp=MediaPlayer.create(getApplicationContext(),R.raw.messengerrefreshsound);// the song is a filename which i have pasted inside a folder **raw** created under the **res** folder.//
+                    mp.prepare();
+                    mp.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+                MediaPlayer mMediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.messengerrefreshsound);
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        onStop();
+                    }
+                });
+                mMediaPlayer.start();
+
+
+                if (Common.IsConnectedToInternet(getApplicationContext()))
+                {
+                    loadListFoods(categoryId);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+        //Defaulet ,Load First Time
+        swipeRefresh.setRefreshing(true);
+
+        swipeRefresh.post(new Runnable() {
+            @Override
+            public void run()
+            {
+
+                if (Common.IsConnectedToInternet(getApplicationContext()))
+                {
+                    loadListFoods(categoryId);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
     private void startSearch(CharSequence text) {
@@ -214,16 +290,12 @@ public class FoodList extends AppCompatActivity {
        // query = foodList.orderByChild("Name").equalTo(text.toString()); //Compare Name
 
         //---Using Firebase UI to populate a RecyclerView--------//
-        query= FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Foods").orderByChild("Name").equalTo(text.toString());
 
-
-
+        //Create Query By Name
+        searchByName= foodList.orderByChild("Name").equalTo(text.toString());
         //  query.keepSynced(true);//Load Data OffLine
-
         options = new FirebaseRecyclerOptions.Builder<Food>()
-                .setQuery(query, Food.class)
+                .setQuery(searchByName, Food.class)
                 .build();
 
         searchAdapter = new FirebaseRecyclerAdapter<Food, FoodViewHolder>(options) {
@@ -276,6 +348,8 @@ public class FoodList extends AppCompatActivity {
 
         };//end Adapter
 
+
+        searchAdapter.startListening();
         recyclerViewFoods.setAdapter(searchAdapter); //set Adapter for Recycler view is search resulet
     }
 
@@ -309,18 +383,13 @@ public class FoodList extends AppCompatActivity {
      //Load Data from Firebase to displayed Recyclerview
     private void loadListFoods(String categoryId)
     {
-
-
-
         //---Using Firebase UI to populate a RecyclerView--------//
-        query= FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Foods");
 
-        query.keepSynced(true);//Load Data OffLine
+        //Create Query by Category Id
+        Query  searchById= foodList.orderByChild("menuId").equalTo(categoryId);
 
         options = new FirebaseRecyclerOptions.Builder<Food>()
-                .setQuery(query, Food.class)
+                .setQuery(searchById, Food.class)
                 .build();
 
         adapter = new FirebaseRecyclerAdapter<Food, FoodViewHolder>(options) {
@@ -366,10 +435,27 @@ public class FoodList extends AppCompatActivity {
                 });
 
 
+                holder.queckCartImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        //Send Data to Sqlite
+                        new Database(getBaseContext()).addToCarts(new Order(adapter.getRef(position).getKey(),
+                                model.getName(),
+                               "1",
+                                model.getPrice(),
+                                model.getDiscount())
+                        );
 
-                    //Check food do Favorites or Not ,is Not Display Image Favorite border...
+                        Toast.makeText(FoodList.this, "Added To Cars", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                   //Check food do Favorites or Not ,is Not Display Image Favorite border...
                 if (localDatabe.isFoodFavorites(adapter.getRef(position).getKey()))
                     holder.favimage.setImageResource(R.drawable.ic_favorite_black_24dp);
+
 
                       //if Click on Image Favorites
                 holder.favimage.setOnClickListener(new View.OnClickListener()
@@ -414,9 +500,9 @@ public class FoodList extends AppCompatActivity {
 
             }//end OnBind
         };//end Adapter
-
+        adapter.startListening();
         recyclerViewFoods.setAdapter(adapter);
-       // swipeRefresh.setRefreshing(false);
+        swipeRefresh.setRefreshing(false);
     }
 
     //Start Adapter
@@ -433,6 +519,7 @@ public class FoodList extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+
     }
 
 

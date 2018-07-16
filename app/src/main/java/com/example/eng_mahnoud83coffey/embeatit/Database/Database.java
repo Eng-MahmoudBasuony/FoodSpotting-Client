@@ -132,7 +132,9 @@ public class Database extends SQLiteAssetHelper
 
         SQLiteDatabase db=getReadableDatabase();
 
-        String query=String.format("SELECT * FROM Favorites WHERE foodId='%s';",foodId);
+         String query=String.format("SELECT * FROM Favorites WHERE foodId='%s' ;",foodId);
+
+       // String q = "SELECT * FROM Favorites WHERE _id = " + foodId ;
 
         Cursor cursor=db.rawQuery(query,null);
 
@@ -146,4 +148,24 @@ public class Database extends SQLiteAssetHelper
     }
 
 
+    public int getCountCart() {
+
+        int count=0;
+
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query=String.format("SELECT COUNT(*) FROM OrderDetails");
+
+        Cursor cursor=db.rawQuery(query,null);
+
+        if (cursor.moveToFirst())
+        {
+            do {
+
+                count=cursor.getInt(0);
+
+            }while (cursor.moveToNext());
+        }
+        return count;
+    }
 }

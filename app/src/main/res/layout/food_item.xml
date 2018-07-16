@@ -69,15 +69,38 @@
         </LinearLayout>
 
 
-        <TextView
-        android:layout_margin="10dp"
-        android:id="@+id/food_price_foodList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$1000"
-        android:textSize="20sp"
-        android:layout_alignParentBottom="true"
-        />
+      <RelativeLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+          >
+
+          <TextView
+              android:layout_margin="10dp"
+              android:id="@+id/food_price_foodList"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="$1000"
+              android:textSize="20sp"
+              android:layout_alignParentLeft="true"
+             android:layout_centerVertical="true"
+              />
+
+
+          <ImageView
+              android:id="@+id/queck_cart_image"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:src="@drawable/shopping_cart_black_24dp"
+              android:scaleType="centerCrop"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginRight="30dp"
+              android:tint="@color/colorAccent"
+              />
+
+
+      </RelativeLayout>
 
 
     </LinearLayout>

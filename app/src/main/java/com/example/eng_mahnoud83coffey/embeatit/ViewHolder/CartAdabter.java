@@ -102,6 +102,7 @@ public class CartAdabter extends RecyclerView.Adapter<CartViewHolder>
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position)
     {
+
         TextDrawable textDrawable=TextDrawable.builder()
                                   .buildRound(""+listData.get(position).getQuentity(), Color.RED);
 

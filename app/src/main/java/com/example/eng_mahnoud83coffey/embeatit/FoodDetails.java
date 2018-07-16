@@ -12,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.eng_mahnoud83coffey.embeatit.Common.Common;
 import com.example.eng_mahnoud83coffey.embeatit.Database.Database;
@@ -45,7 +46,7 @@ public class FoodDetails extends AppCompatActivity implements RatingDialogListen
     private TextView foodName,foodPrice,foodDescription;
     private ImageView foodImage;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private FloatingActionButton btnCart;
+    private CounterFab btnCart;
     private FloatingActionButton btnRating;
     private ElegantNumberButton numberButton;
     private RatingBar ratingBar;
@@ -83,7 +84,7 @@ public class FoodDetails extends AppCompatActivity implements RatingDialogListen
          foodPrice=(TextView)findViewById(R.id.food_Price_FoodDetails);
          foodDescription=(TextView)findViewById(R.id.food_description_foodDetails);
          foodImage=(ImageView)findViewById(R.id.image_foodDetails);
-         btnCart=(FloatingActionButton)findViewById(R.id.btnCart_foodDetails);
+         btnCart=(CounterFab)findViewById(R.id.btnCart_foodDetails);
          btnRating=(FloatingActionButton)findViewById(R.id.btnRating_foodDetails);
          ratingBar=(RatingBar)findViewById(R.id.rating_bar_foodDetails);
          collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.collapsing_FoodDetails);
@@ -128,9 +129,13 @@ public class FoodDetails extends AppCompatActivity implements RatingDialogListen
                                                                       currentFood.getDiscount())
                                                            );
                 Toast.makeText(FoodDetails.this, "Added To Cars", Toast.LENGTH_SHORT).show();
+                btnCart.setCount(new Database(getBaseContext()).getCountCart());
+
+
             }
         });
 
+            btnCart.setCount(new Database(this).getCountCart());
 
             //Show Dialog Rating
         btnRating.setOnClickListener(new View.OnClickListener() {

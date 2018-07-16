@@ -77,5 +77,9 @@ dependencies {
      // library custom font Calligraphy
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
+
+    //FloatingActionButton subclass that shows a counter badge on right top corner
+    implementation 'com.github.andremion:counterfab:1.0.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

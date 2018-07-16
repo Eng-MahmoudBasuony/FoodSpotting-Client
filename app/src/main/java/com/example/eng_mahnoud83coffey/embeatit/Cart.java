@@ -69,7 +69,7 @@ public class Cart extends AppCompatActivity {
     private static final int PAYPAL_REQUEST_CODE=9999;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private TextView textTotalPrice;
+    public TextView textTotalPrice;
     private Button   buttonPlaceOrder;
     //-------------------------------
     private FirebaseDatabase database;

@@ -3,6 +3,7 @@ package com.example.eng_mahnoud83coffey.embeatit.Model;
 //مودل كلاس هشيل فيه الطلبات اللى المستخدم بيختارها عشان اخزنها فى الSQlite
 public class Order
 {
+    private int    ID;
     private String ProudactID;
     private String ProudactName;
     private String Quentity;
@@ -13,8 +14,16 @@ public class Order
     public Order() {
     }
 
+    public Order(int ID, String proudactID, String proudactName, String quentity, String price, String discount) {
+        this.ID = ID;
+        ProudactID = proudactID;
+        ProudactName = proudactName;
+        Quentity = quentity;
+        Price = price;
+        Discount = discount;
+    }
+    public Order( String proudactID, String proudactName, String quentity, String price, String discount) {
 
-    public Order(String proudactID, String proudactName, String quentity, String price, String discount) {
         ProudactID = proudactID;
         ProudactName = proudactName;
         Quentity = quentity;
@@ -22,6 +31,13 @@ public class Order
         Discount = discount;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
     public String getProudactID() {
         return ProudactID;
@@ -62,10 +78,4 @@ public class Order
     public void setDiscount(String discount) {
         Discount = discount;
     }
-
-
-
-
-
-
 }

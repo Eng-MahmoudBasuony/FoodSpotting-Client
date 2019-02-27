@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <integer name="anim_length">3000</integer>
+    <integer name="anim_length_half">1500</integer>
+
+</resources>

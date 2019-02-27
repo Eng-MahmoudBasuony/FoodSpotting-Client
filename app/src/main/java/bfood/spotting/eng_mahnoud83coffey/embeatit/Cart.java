@@ -113,14 +113,12 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHleperLi
     private Place shappingAddress;
     //---------my Location-----------
 
-
     private GpsTracker gpsTracker; //Class Get GPS  and open Location
 
     //Decleration
     private IGoogleServicecs mIGoogleServicecs;
     // Notification
     private ApiService mApiService;
-
 
     //paypal payment
     private static PayPalConfiguration config = new PayPalConfiguration()

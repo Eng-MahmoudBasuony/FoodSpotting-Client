@@ -5,40 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/signup"
-    tools:context=".MainActivity">
+    android:background="@drawable/m8"
+    tools:context="bfood.spotting.eng_mahnoud83coffey.embeatit.MainActivity">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        >
+
         <ImageView
-            android:src="@drawable/finallogo"
-            android:layout_width="200dp"
-            android:scaleType="centerCrop"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-           android:layout_marginLeft="5dp"
+            android:id="@+id/logo"
+            android:src="@drawable/my_logo_emb"
+            android:layout_width="300dp"
+            android:layout_height="350dp"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             />
 
         <TextView
             android:id="@+id/txtslogn"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:fontFamily="cursive"
+            android:fontFamily="serif-monospace"
             android:gravity="center"
             android:text="@string/slogn"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="17sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-
+            android:textStyle="bold"
+            android:layout_below="@+id/logo"
+            android:layout_centerInParent="true"
+            />
 
 
     <LinearLayout
@@ -46,30 +41,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:weightSum="2"
+        android:weightSum="1"
+        android:layout_margin="5dp"
         >
 
-        <Button
-            android:id="@+id/btnMainSignUp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/btnsignin"
-            android:text="@string/Sign_Up"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/btnMainSignIn"
+            android:id="@+id/btnContinue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@drawable/btnsignup"
-            android:text="@string/Sign_In"
+            android:text="@string/continuebtn"
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
+
     </LinearLayout>
 
 </RelativeLayout>

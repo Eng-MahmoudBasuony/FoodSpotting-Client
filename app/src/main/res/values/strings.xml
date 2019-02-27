@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">EMBEat It</string>
-    <string name="slogn">From classic favourites to artisan flavours. Choose from tasty toasties packed full of succulent meat, fresh grilled vegetables and melted cheese – dripping with delicious dressings.</string>
+    <string name="slogn">From classic favourites to artisan flavours. Choose from tasty toasties packed full of succulent meat</string>
     <string name="Sign_Up">Sign Up</string>
     <string name="Sign_In">Sign In</string>
     <string name="notAmemberYet">Not a member yet? </string>
@@ -28,9 +28,56 @@
     <string name="old_Password">Old Password</string>
     <string name="new_Password">New Password</string>
     <string name="repeat_Password">Repeat New Password</string>
+    <string name="continuebtn">Continue</string>
 
+    <!-- strings.xml -->
 
-    <string name="facebook_app_id">2124901041128674</string>
-    <string name="facebook_login_protocol_name">fb2124901041128674</string>
+                         <!-- 2124901041128674 -->
+    <string name="FACEBOOK_APP_ID">397375170809754</string>
+    <string name="facebook_login_protocol_name">f397375170809754</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">b0d1b7107c9c86444db355a28b8e35d2</string>
+
+    <string name="ShipeThis_address">Shipe To This Address</string>
+    <string name="home_address">Home Address</string>
+    <string name="home_address_dialog">Home Address</string>
+    <string name="Show_comment">Show Comment</string>
+    <string name="delivery_method">Devlivery Method :</string>
+    <string name="payment_method">Payment Method :</string>
+    <string name="payment_cashDelivery">Cash on Delivery</string>
+    <string name="radio_payment_PAYPAL">PAYPAL</string>
+    <string name="radio_payment_balance">Food Spotting Balance</string>
+    <string name="subscribe_news">Subscribe News</string>
+    <string name="descriptionNewMessing">Your subscription to the messaging service lets you know discounts and new foods</string>
+    <string name="settings">Settings</string>
+    <string name="delete">Delete</string>
+    <string name="search">Search</string>
+    <string name="title_activity_tracking_shipper">Map</string>
+    <string name="shipping_tracking">Shipping Tracking</string>
+    <string name="rating_food_delivery">Rating Food Delivery</string>
+    <string name="rating_delivery">We are pleased to show your opinion on the process of delivering demand. Your satisfaction is our goal</string>
+    <string name="Show_your_opinion_incomment">Show your opinion in a comment</string>
+    <string name="thank_you_feedback">Thank You</string>
+    <string name="not_rating">Not Rating</string>
+
+    <string name="Bad">Bad</string>
+    <string name="Acceptable">Acceptable</string>
+    <string name="good">Good</string>
+    <string name="very_good">very good</string>
+    <string name="Excellent">Excellent</string>
+    <string name="feedback_service">Evaluation of the service</string>
+
+    <string name="google_directions_key">AIzaSyD9TQRCR4M5q_ZCNPlOnt1TEBOXT743yQo</string>
+    <string name="one_more_step">One More Step !</string>
+    <string name="yes">Yes</string>
+    <string name="name">Name</string>
+    <string name="finish">Finish</string>
+    <string name="Change">Change</string>
+    <string name="Cancel">Cancel</string>
+    <string name="description_about">Food Spotting is the number one application in Al - Mansoura city that you can request any meal you want through a few easy steps anywhere you want. It is also free for a lifetime for non-users of restaurant owners This application is provided by Mahmoud Basuony</string>
+    <string name="about_me">About Me</string>
+    <string name="facebook">facebook.com/EMBasuony</string>
+    <string name="call_us">Call Us</string>
+    <string name="please_rate">Please Rate Us</string>
+    <string name="share_app">Share App</string>
 
 </resources>

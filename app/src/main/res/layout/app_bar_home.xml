@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home">
-
-
-
-
+    tools:context="bfood.spotting.eng_mahnoud83coffey.embeatit.Home"
+    >
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,23 +16,52 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/background_toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
             />
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_home" />
 
-        <com.andremion.counterfab.CounterFab
-            android:id="@+id/fab_home"
+    <RelativeLayout
+        android:id="@+id/badge_layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/relative_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/shopping_cart_black_24dp"
-            app:backgroundTint="@android:color/white"
-             />
+            >
+            <Button
+                android:id="@+id/btn_badge_home"
+                android:layout_width="65dip"
+                android:layout_height="65dip"
+                android:background="@drawable/shopping_cart_black_24dp"
+                />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/badgeText_Home"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignRight="@+id/relative_layout"
+            android:background="@drawable/background_badge_counter"
+            android:text="16"
+            android:textColor="#FFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_margin="-10dp"
+            android:fontFamily="serif"
+            />
+
+    </RelativeLayout>
 
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

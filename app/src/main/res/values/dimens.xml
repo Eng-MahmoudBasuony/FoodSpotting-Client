@@ -7,4 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
     
     <integer name="animition_duration">3000</integer>
+
+
 </resources>

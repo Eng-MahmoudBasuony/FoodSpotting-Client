@@ -1,59 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.eng_mahnoud83coffey.embeatit">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="bfood.spotting.eng_mahnoud83coffey.embeatit">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/food_sppoting"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/food_sppoting_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:icon,android:theme">
 
+        <!--
         android:hardwareAccelerated="false"
         android:largeHeap="true"
-        >
+        -->
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAJ8W4IiZCMy5mMisk2VDfO-vjgr2wP7KI" />
 
-
-
-        <activity android:name=".MainActivity">
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignIn" />
-        <activity android:name=".SignUp" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/FACEBOOK_APP_ID" />
+
         <activity
-            android:name=".Home"
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/facebook_login_protocol_name" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.facebook.accountkit.ApplicationName"
+            android:value="@string/app_name" />
+        <meta-data
+            android:name="com.facebook.accountkit.ClientToken"
+            android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
+
+        <activity
+            android:name="com.facebook.accountkit.ui.AccountKitActivity"
+            android:theme="@style/AppLoginTheme"
+            tools:replace="android:theme" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.SignIn" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.SignUp" />
+        <activity
+            android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.Home"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
-        <activity android:name=".FoodList" />
-        <activity android:name=".FoodDetails" />
-        <activity android:name=".Cart" />
-        <activity android:name=".OrderStatus" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.FoodList" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.FoodDetails" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.Cart" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.OrderStatus" />
 
-
-        //Service Notification
-        <service android:name=".Service.MyFirebaseIdServer">
+        <!-- ***********************************FCM************************** -->
+        <service android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.Service.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.Service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".Service.MyFirebaseMessaging">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
-
-
-
+        <!-- ******************************************************* -->
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.ShowComment" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.SearchActivityHome" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.FavoritesActivity" />
+        <activity
+            android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.TrackingShipper"
+            android:label="@string/title_activity_tracking_shipper" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.FeedbackService" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.NextActivity" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.AboutMe" />
+        <activity android:name="bfood.spotting.eng_mahnoud83coffey.embeatit.MenuActivity"></activity>
     </application>
 
 </manifest>

@@ -7,20 +7,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Home"
+    tools:context="bfood.spotting.eng_mahnoud83coffey.embeatit.Home"
     tools:showIn="@layout/app_bar_home"
     android:id="@+id/SwipeHome_Refresh"
     >
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-         android:scrollbars="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
-    </android.support.v7.widget.RecyclerView>
+        <com.daimajia.slider.library.SliderLayout
+            android:id="@+id/slider"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="55dp"
+            />
 
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
 
 
 </android.support.v4.widget.SwipeRefreshLayout>

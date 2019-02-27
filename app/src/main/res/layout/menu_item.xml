@@ -11,13 +11,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="250dp"
+        >
 
         
         <ImageView
             android:id="@+id/menu_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="250dp"
             android:src="@drawable/signin"
             android:scaleType="centerCrop"
             />

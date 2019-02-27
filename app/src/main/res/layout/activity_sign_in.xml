@@ -8,7 +8,7 @@
     android:fillViewport="true"
     android:layoutDirection="locale"
 
-    tools:context=".SignIn">
+    tools:context="bfood.spotting.eng_mahnoud83coffey.embeatit.SignIn">
 
 
     <LinearLayout

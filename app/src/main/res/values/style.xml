@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Add this line -->
+        <item name="android:windowContentTransitions">true</item>
+
+
+
     </style>
 
 
@@ -29,13 +35,13 @@
 
 
     <style name="EpandedAppBar" parent="android:TextAppearance.Material.Title">
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/greenW</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="CollapsdAppBar" parent="android:TextAppearance.Medium">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/greenW</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -48,5 +54,28 @@
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
+
+
+  <!--style Account kit facbook-->
+    <style name="AppLoginTheme" parent="Theme.AccountKit" >
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!--Custom Rating Bar -->
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/indigo</item>
+        <item name="colorControlActivated">@color/pink</item>
+    </style>
+
+    <!-- animations Dialog -->
+    <style name="DialogTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_right</item>
+    </style>
+
+
+
+
+
 
 </resources>

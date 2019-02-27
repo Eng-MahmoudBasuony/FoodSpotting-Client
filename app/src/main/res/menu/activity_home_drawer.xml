@@ -17,6 +17,20 @@
            android:iconTint="@android:color/white"
             android:title="Cart" />
 
+        <item
+            android:id="@+id/nav_fav"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="Favorites" />
+
+
+        <item
+            android:id="@+id/nav_home_address"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home_address_dialog"
+            android:iconTint="@android:color/white"
+
+            />
 
         <item
             android:id="@+id/nav_orders"
@@ -25,11 +39,29 @@
             android:title="Orders" />
 
         <item
-            android:id="@+id/nav_change_pwd"
-            android:icon="@drawable/ic_security_black_24dp"
+            android:id="@+id/nav_feedback_client"
+            android:icon="@drawable/ic_tag_faces_black_24dp"
             android:iconTint="@android:color/white"
-            android:title="Change Password"
+            android:title="@string/feedback_service"
             />
+
+
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/settings"
+            />
+
+
+        <item
+            android:id="@+id/nav_about_me"
+            android:icon="@drawable/about_me"
+            android:iconTint="@color/white"
+            android:title="@string/about_me"
+            />
+
 
         <item
             android:id="@+id/nav_logout"
@@ -37,6 +69,8 @@
             android:title="Sign out"
             android:iconTint="@android:color/white"
             />
+
+
     </group>
 
 

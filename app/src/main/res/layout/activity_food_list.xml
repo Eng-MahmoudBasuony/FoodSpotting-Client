@@ -5,15 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FoodList"
+    tools:context="bfood.spotting.eng_mahnoud83coffey.embeatit.FoodList"
     android:id="@+id/swipe_foodlist_refresh"
     >
-
 
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#c7c9c6"
     >
 
     <com.mancj.materialsearchbar.MaterialSearchBar

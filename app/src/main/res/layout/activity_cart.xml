@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".Cart"
-    android:background="@drawable/signup"
+    tools:context="bfood.spotting.eng_mahnoud83coffey.embeatit.Cart"
+    android:background="@color/backgroundAll"
+    android:id="@+id/rootLayoutCart"
     >
 
 

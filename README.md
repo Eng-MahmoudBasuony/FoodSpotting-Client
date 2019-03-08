@@ -30,7 +30,7 @@
    *  Communicate with the customer service by phone
    *  Share Food in Facebook
    *  , Details and other features
-   
+   *  Open-source    
  ---
 # Client  App
  
